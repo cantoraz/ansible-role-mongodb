@@ -1,0 +1,7 @@
+---
+
+mongodb_version: 3.4
+
+mongodb_db_path: /var/lib/mongodb
+
+mongodb_bind_ip: 127.0.0.1

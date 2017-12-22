@@ -1,0 +1,47 @@
+---
+
+- name: Install the init.d script which disables Transparent Huge Pages (THP)
+  copy:
+    src: disable-transparent-hugepages
+    dest: /etc/init.d/disable-transparent-hugepages
+    mode: 0755
+
+- name: Disables Transparent Huge Pages (THP)
+  service:
+    name: disable-transparent-hugepages
+    state: started
+    enabled: yes
+    use: sysv
+  notify: restart mongodb
+
+# CAUTION:
+# Procedure of following three tasks is a wrong route to increase ulimit value,
+# because pam_limits module only affects login session, but not daemon
+# processes.
+# Fortunately, the MongoDB systemd unit has already configured these limits.
+
+# - name: Ensure pam_limits.so module is required by session control
+#   lineinfile:
+#     path: /etc/pam.d/common-session
+#     line: session required pam_limits.so
+#     state: present
+
+# - name: Create the PAM limits config for MongoDB if not exists
+#   command: touch {{ mongodb_pam_limits_conf }}
+#   args:
+#     creates: "{{ mongodb_pam_limits_conf }}"
+
+# - name: Ensure PAM limits to be set to recommended value
+#   pam_limits:
+#     dest: "{{ mongodb_pam_limits_conf }}"
+#     domain: mongodb
+#     limit_type: '-'
+#     limit_item: "{{ item.name }}"
+#     value: "{{ item.value }}"
+#   with_items:
+#     - { name: fsize,  value: unlimited }
+#     - { name: cpu,    value: unlimited }
+#     - { name: as,     value: unlimited }
+#     - { name: nofile, value: 64000 }
+#     - { name: nproc,  value: 64000 }
+#   notify: restart mongodb

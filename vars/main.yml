@@ -1,0 +1,5 @@
+---
+
+# mongodb_pam_limits_conf: /etc/security/limits.d/mongodb.conf
+
+mongodb_daemon: mongod

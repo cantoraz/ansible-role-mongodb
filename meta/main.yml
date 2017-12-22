@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Cantoraz Chou
+  description: Ansible role to install and configure MongoDB for Ubuntu Linux
+
+  license: license (GPLv3)
+
+  min_ansible_version: 2.2
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+
+  galaxy_tags:
+    - database
+
+dependencies: []
