@@ -1,0 +1,17 @@
+################################################################################
+# Ansible.gitignore
+# Refer to https://github.com/github/gitignore/blob/master/Global/Ansible.gitignore
+################################################################################
+
+*.retry
+
+################################################################################
+# Vagrant.gitignore
+# Refer to https://github.com/github/gitignore/blob/master/Global/Vagrant.gitignore
+################################################################################
+
+# General
+.vagrant/
+
+# Log files (if you are creating logs in debug mode, uncomment this)
+# *.logs
