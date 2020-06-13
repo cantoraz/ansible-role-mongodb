@@ -1,6 +1,8 @@
 ---
 
-mongodb_version: 3.4
+mongodb_version: 4.2
+
+mongodb_apt_repository: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ansible_lsb.codename }}/mongodb-org/{{ mongodb_version }} multiverse
 
 mongodb_db_path: /var/lib/mongodb
 

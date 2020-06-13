@@ -10,8 +10,10 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - xenial
+        - bionic
 
   galaxy_tags:
     - database
+    - mongodb
 
 dependencies: []
