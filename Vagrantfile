@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+  config.vm.box_check_update = false
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -45,6 +45,10 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
+  # config.vm.synced_folder '.vagrant/public', '/mnt/dskb-web/public',
+  #                         owner: 'www-data', group: 'www-data',
+  #                         mount_options: %w[dmode=0775,fmode=0664]
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -52,13 +56,42 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
-
-    # Customize the amount of memory on the VM:
-    vb.memory = "1024"
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+    vb.cpus = 1
+    vb.linked_clone = true
+    # CAUTION
+    # Invoke this directive ONLY ONCE before attaching additional disks,
+    # then comment out it for subsequent using.
+    # Vagrant Disks feature has a quirk that additional disks are always
+    # attached to the controller named `SATA Controller'. The Ubuntu Official
+    # box only has the SCSI controller. While VirtualBox boots up from SATA
+    # disks in preference over SCSI disks. So renaming the present SCSI
+    # Controller to `SATA Controller' is the simplest solution.
+    # vb.customize ['storagectl', :id, '--name', 'SCSI', '--rename', 'SATA Controller']
   end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
+  vms = %w[db1 db2 db3]
+  vms.each_with_index do |host, i|
+    config.vm.define host do |machine|
+      machine.vm.hostname = "#{host}"
+      machine.vm.network 'private_network', ip: "10.0.0.#{11 + i}", nic_type: 'virtio'
+
+      # Only execute once the Ansible provisioner,
+      # when all the machines are up and ready.
+      if i == vms.length - 1
+        machine.vm.provision :ansible do |ansible|
+          # Disable default limit to connect to all the machines
+          ansible.limit = 'all'
+          ansible.playbook = 'tests/playbook.yml'
+          ansible.verbose = 'vv'
+        end
+      end
+    end
+  end
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
@@ -68,8 +101,8 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "tests/playbook.yml"
-    ansible.verbose = 'vv'
-  end
+  # config.vm.provision "ansible" do |ansible|
+  #   ansible.playbook = "tests/playbook.yml"
+  #   ansible.verbose = 'vv'
+  # end
 end
