@@ -29,7 +29,7 @@
 # Ubuntu. So we don't need to stop MongoDB manually, but do need to manually
 # reload systemd daemon to load the MongoDB systemd unit before enable/start it.
 - name: Ensure MongoDB is installed
-  package: name=mongodb-org state=present
+  package: name=mongodb-org={{ mongodb_version }}.* state=present
 
 - name: Ensure MongoDB is configured
   template:
