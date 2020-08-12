@@ -9,9 +9,13 @@
   register: mongodb_installed
 
 - name: Import MongoDB public GPG Key
+  # apt_key:
+  #   keyserver: keyserver.ubuntu.com
+  #   id: E162F504A20CDF15827F718D4B7C549A058F8B6B
+  #   state: present
   apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: E162F504A20CDF15827F718D4B7C549A058F8B6B
+    id: "{{ mongodb_apt_repo_key_finger }}"
+    url: "{{ mongodb_apt_repo_key_url }}"
     state: present
 
 - name: Add MongoDB official APT repository
