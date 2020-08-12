@@ -10,3 +10,8 @@ mongodb_apt_repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {
 mongodb_db_path: /var/lib/mongodb
 
 mongodb_bind_ip: 127.0.0.1
+
+mongodb_replication_enabled: false
+mongodb_replica_set_name: 'rs0'
+# mongodb_replica_set_primary: '' # should be provided by user
+mongodb_replica_set_members: []

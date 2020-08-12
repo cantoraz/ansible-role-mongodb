@@ -1,0 +1,7 @@
+---
+
+- name: Ensure replica set {{ mongodb_replica_set_name }} exists
+  mongodb_replicaset:
+    replica_set: "{{ mongodb_replica_set_name }}"
+    members: "{{ mongodb_replica_set_members }}"
+  when: inventory_hostname == mongodb_replica_set_primary

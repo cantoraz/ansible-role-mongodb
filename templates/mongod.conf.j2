@@ -33,7 +33,14 @@ processManagement:
 
 #operationProfiling:
 
+{% block replication %}
+{% if mongodb_replication_enabled %}
+replication:
+  replSetName: {{ mongodb_replica_set_name }}
+{% else %}
 #replication:
+{% endif %}
+{% endblock %}
 
 #sharding:
 

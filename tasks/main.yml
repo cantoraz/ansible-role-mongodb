@@ -1,5 +1,10 @@
 ---
 
+- name: Ensure dependencies of Ansible modules are installed
+  pip:
+    name: pymongo>=3.11.0
+    state: present
+
 # Tune server to improve performance for database 
 - include: tune_performance.yml
 
@@ -52,3 +57,9 @@
 
 - name: Ensure MongoDB is running and enabled on boot
   service: name={{ mongodb_daemon }} state=started enabled=yes
+
+- meta: flush_handlers
+
+# Set up the replica set if enabled
+- import_tasks: replication.yml
+  when: mongodb_replication_enabled
