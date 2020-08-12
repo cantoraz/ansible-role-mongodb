@@ -16,7 +16,7 @@
 
 - name: Add MongoDB official APT repository
   apt_repository:
-    repo: "{{ mongodb_apt_repository }}"
+    repo: "{{ mongodb_apt_repo }}"
     state: present
     filename: mongodb-org-{{ mongodb_version }}
     update_cache: yes
